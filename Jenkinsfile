@@ -1,48 +1,48 @@
 pipeline {
     agent any
     environment {
-		dockerImage = ''
+        dockerImage = ''
     }
     stages {
-    	stage('CheckOut Code'){
-         	steps{
-            	checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/suncscsba/FSD-SBA.git']]])
+        stage('CheckOut Code'){
+             steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/sd2438892/suncscsba.git']]])
             }
         }
         stage('Maven Build'){
-        	steps{
-        	    bat 'mvn clean package -DskipTests'
-        	}
+            steps{
+                bat 'mvn clean package -DskipTests'
+            }
         }
         stage('Image Build'){
-        	steps{
-        	    bat 'mvn dockerfile:build'
-        	}
+            steps{
+                bat 'mvn dockerfile:build'
+            }
         }
         stage('Image Push'){
-        	steps{
-        	    bat 'docker push suncscsba/registry:latest'
-        	    bat 'docker push suncscsba/gateway:latest'
-        	    bat 'docker push suncscsba/payment:latest'
-        	    bat 'docker push suncscsba/search:latest'
-        	    bat 'docker push suncscsba/security:latest'
-        	    bat 'docker push suncscsba/technology:latest'
-        	    bat 'docker push suncscsba/training:latest'
-        	    bat 'docker push suncscsba/user:latest'
-        	}
+            steps{
+                bat 'docker push suncscsba/registry:latest'
+                bat 'docker push suncscsba/gateway:latest'
+                bat 'docker push suncscsba/payment:latest'
+                bat 'docker push suncscsba/search:latest'
+                bat 'docker push suncscsba/security:latest'
+                bat 'docker push suncscsba/technology:latest'
+                bat 'docker push suncscsba/training:latest'
+                bat 'docker push suncscsba/user:latest'
+            }
         }
         stage('Remove Image'){
-        	steps{
-        	    bat 'docker rmi suncscsba/registry'
-        	    bat 'docker rmi suncscsba/gateway'
-        	    bat 'docker rmi suncscsba/payment'
-        	    bat 'docker rmi suncscsba/search'
-        	    bat 'docker rmi suncscsba/security'
-        	    bat 'docker rmi suncscsba/technology'
-        	    bat 'docker rmi suncscsba/training'
-        	    bat 'docker rmi suncscsba/user'
-        	    bat 'docker image prune -f'
-        	}
+            steps{
+                bat 'docker rmi suncscsba/registry'
+                bat 'docker rmi suncscsba/gateway'
+                bat 'docker rmi suncscsba/payment'
+                bat 'docker rmi suncscsba/search'
+                bat 'docker rmi suncscsba/security'
+                bat 'docker rmi suncscsba/technology'
+                bat 'docker rmi suncscsba/training'
+                bat 'docker rmi suncscsba/user'
+                bat 'docker image prune -f'
+            }
         }
     }
 }
